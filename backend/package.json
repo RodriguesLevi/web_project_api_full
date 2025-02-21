@@ -1,26 +1,27 @@
 {
-  "name": "backend",
+  "name": "web_project_around_express",
   "version": "1.0.0",
+  "type": "module",
+  "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Alisson",
   "license": "ISC",
-  "description": "",
   "dependencies": {
-    "bcryptjs": "^3.0.2",
-    "celebrate": "^15.0.3",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "helmet": "^8.0.0",
-    "joi": "^17.13.3",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.10.1",
-    "morgan": "^1.10.0",
-    "validator": "^13.12.0",
-    "winston": "^3.17.0"
+    "mongoose": "^8.9.5",
+    "uuid": "^11.0.5",
+    "validator": "^13.12.0"
+  },
+  "devDependencies": {
+    "eslint": "8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.31.0",
+    "nodemon": "^3.1.9"
   }
 }

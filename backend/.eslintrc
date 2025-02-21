@@ -1,0 +1,11 @@
+{
+  "extends": "airbnb-base",
+  "rules": {
+    "no-console": ["warn", { "allow": ["log"] }],
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }],
+    "linebreak-style": "off",
+    "quotes": ["error", "double"],
+    "curly": ["error", "all"]
+  },
+  "ignorePatterns": ["*.test.js", "*.spec.js", "node_modules/", "*.js"]
+}

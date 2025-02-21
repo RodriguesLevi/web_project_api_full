@@ -1,60 +1,34 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
-const bcrypt = require("bcryptjs");
-
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    default: "Jacques Cousteau",
-    minlength: 2,
-    maxlength: 30,
-  },
-  about: {
-    type: String,
-    default: "Explorer",
-    minlength: 2,
-    maxlength: 30,
-  },
-  avatar: {
-    type: String,
-    default: "https://example.com/avatar.jpg",
-    validate: {
-      validator: (v) => validator.isURL(v),
-      message: "Invalid URL",
+import mongoose, { version } from "mongoose";
+import validator from "validator";
+const userScheme = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlenght: 30,
+    },
+    about: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlenght: 30,
+    },
+    avatar: {
+      type: String,
+      required: true,
+      validator: {
+        validator: (v) => {
+          return validator.isURL(v);
+        },
+        message: "link invalido",
+      },
     },
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: {
-      validator: (v) => validator.isEmail(v),
-      message: "Invalid email",
-    },
-  },
-  password: {
-    type: String,
-    required: true,
-    select: false,
-  },
-});
+  {
+    versionKey: false,
+  }
+);
 
-userSchema.statics.findUserByCredentials = function (email, password) {
-  return this.findOne({ email })
-    .select("+password")
-    .then((user) => {
-      if (!user) {
-        return Promise.reject(new Error("Incorrect email or password"));
-      }
-
-      return bcrypt.compare(password, user.password).then((matched) => {
-        if (!matched) {
-          return Promise.reject(new Error("Incorrect email or password"));
-        }
-
-        return user;
-      });
-    });
-};
-
-module.exports = mongoose.model("User", userSchema);
+const UserModel = mongoose.model("user", userScheme);
+export { UserModel };

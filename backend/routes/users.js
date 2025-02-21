@@ -1,10 +1,22 @@
-// routes/users.js
-const express = require("express");
-const auth = require("../middlewares/auth");
-const { getCurrentUser } = require("../controllers/users");
+import { Router } from "express";
+import {
+  listUser,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUserById,
+} from "../controllers/usersController.js";
 
-const router = express.Router();
+const router = Router();
 
-router.get("/me", auth, getCurrentUser);
+router.get("/", listUser);
 
-module.exports = router;
+router.get("/:id", getUserById);
+
+router.post("/", createUser);
+
+router.put("/:id", updateUser);
+
+router.delete("/:id", deleteUserById);
+
+export default router;

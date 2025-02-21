@@ -1,42 +1,47 @@
-const mongoose = require("mongoose");
-const { PORT, MONGODB_URI } = require("./utils/config");
-const express = require("express");
-const cors = require("cors");
-const helmet = require("helmet");
-const morgan = require("morgan");
-const { errors } = require("celebrate");
-const { requestLogger, errorLogger } = require("./middlewares/logger");
-const { errorHandler } = require("./middlewares/errorHandler");
-const routes = require("./routes");
+import express from "express";
+import cors from "cors";
+import mongoose from "mongoose";
+import userRouter from "./routes/users.js";
+import cardsRouter from "./routes/cards.js";
 
 const app = express();
+const port = 3000;
 
-mongoose
-  .connect(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("Connected to MongoDB");
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error("Error connecting to MongoDB:", err.message);
-  });
+async function connectDatabase() {
+  try {
+    await mongoose.connect("mongodb://localhost:27017/aroundb", {});
+    console.log("Database connect !");
+  } catch (error) {
+    console.error("Error connecting to database:", error.message);
+    process.exit(1);
+  }
+}
+connectDatabase();
+
+app.use((req, res, next) => {
+  req.user = {
+    _id: "679ce63509046fb9a76fc43a", // cole o _id do usuário teste criado no passo anterior
+  };
+
+  next();
+});
+
+function logger(req, res, next) {
+  console.log(
+    `${new Intl.DateTimeFormat("pt-BR").format(Date.now())}- ${req.method} - ${
+      req.url
+    }`,
+  );
+  next();
+}
 
 app.use(cors());
-app.use(helmet());
-app.use(morgan("dev"));
 app.use(express.json());
+app.use(logger);
 
-app.use(requestLogger);
+app.use("/users", userRouter);
+app.use("/cards", cardsRouter);
 
-app.use(routes);
-
-app.use(errorLogger);
-app.use(errors());
-app.use(errorHandler);
-
-module.exports = app;
+app.listen(port, () => {
+  console.log(`Sever running on http://localhost:${port}`);
+});

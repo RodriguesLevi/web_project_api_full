@@ -1,12 +1,27 @@
-const express = require("express");
-const usersRouter = require("./users");
-const { createUser, login } = require("../controllers/users");
+import { Router } from "express";
+import {
+  listCards,
+  createCard,
+  deleteCardById,
+  likeCard,
+  unlikeCard,
+} from "../controllers/cardsController.js";
 
-const router = express.Router();
+const router = Router();
 
-router.post("/signup", createUser);
-router.post("/signin", login);
+// GET /cards — Retorna todos os cards
+router.get("/", listCards);
 
-router.use("/users", usersRouter);
+// POST /cards — Cria um novo card
+router.post("/", createCard);
 
-module.exports = router;
+// DELETE /cards/:cardId — Deleta um card por ID
+router.delete("/:cardId", deleteCardById);
+
+// PUT /cards/:cardId/likes — Curtir um card
+router.put("/:cardId/likes", likeCard);
+
+// DELETE /cards/:cardId/likes — Remover curtida de um card
+router.delete("/:cardId/likes", unlikeCard);
+
+export default router;
